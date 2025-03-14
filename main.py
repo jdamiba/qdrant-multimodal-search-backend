@@ -73,13 +73,13 @@ async def search_images(request: SearchRequest):
         print(f"Embedding shape: {query_embedding.shape}")
         
         # Search in Qdrant
-        search_results = qdrant_client.query_points(
+        search_results = qdrant_client.search(
             collection_name=COLLECTION_NAME,
-            query=query_embedding.tolist(),
+            query_vector=query_embedding.tolist(),
             limit=request.limit
         )
         
-        print(f"Found {len(search_results.points)} results")
+        print(f"Found {len(search_results.results)} results")
         
         # Format results
         results = [
@@ -87,7 +87,7 @@ async def search_images(request: SearchRequest):
                 "filename": hit.payload["filename"],
                 "score": hit.score
             }
-            for hit in search_results.points
+            for hit in search_results.results
         ]
         
         return {"results": results}
