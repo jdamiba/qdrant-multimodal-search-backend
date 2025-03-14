@@ -79,7 +79,7 @@ async def search_images(request: SearchRequest):
             limit=request.limit
         )
         
-        print(f"Found {len(search_results.results)} results")
+        print(f"Found {len(search_results)} results")
         
         # Format results
         results = [
@@ -87,7 +87,7 @@ async def search_images(request: SearchRequest):
                 "filename": hit.payload["filename"],
                 "score": hit.score
             }
-            for hit in search_results.results
+            for hit in search_results
         ]
         
         return {"results": results}

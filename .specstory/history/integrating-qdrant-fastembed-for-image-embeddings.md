@@ -1494,6 +1494,37 @@ Would you like me to help you test the updated code or make any additional impro
 
 ---
 
+_**User**_
+
+{"detail":"Error processing request: 'QdrantClient' object has no attribute 'query_points'"}`,
+
+---
+
+_**Assistant**_
+
+Ah, I see the issue. We need to use the correct method for querying points in Qdrant. Let's update the code to use `search` instead of `query_points` since that's the correct method in the current version of the Qdrant client:
+
+```diff
+        # Search in Qdrant
+-       search_results = qdrant_client.query_points(
++       search_results = qdrant_client.search(
+            collection_name=COLLECTION_NAME,
+-           query=query_embedding.tolist(),
++           query_vector=query_embedding.tolist(),
+            limit=request.limit
+        )
+```
+
+The changes:
+1. Changed `query_points` to `search` which is the correct method
+2. Changed `query` parameter to `query_vector` which is what the `search` method expects
+
+This should resolve the error. The `search` method is the standard way to perform similarity searches in Qdrant. We can ignore the deprecation warning for now since we want to get the functionality working first.
+
+Would you like me to help you test the updated endpoint or make any additional improvements?
+
+---
+
 
 
 ---
