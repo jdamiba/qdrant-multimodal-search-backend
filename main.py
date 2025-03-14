@@ -2,7 +2,8 @@ import os
 from typing import List
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
-from fastembed import ImageEmbedding, TextEmbedding
+from fastembed import ImageEmbedding
+from fastembed import TextEmbedding
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import numpy as np

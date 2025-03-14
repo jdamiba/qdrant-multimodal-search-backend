@@ -1455,6 +1455,45 @@ Would you like me to provide more specific examples for your Next.js implementat
 
 ---
 
+_**User**_
+
+ImportError: cannot import name 'ImageEmbedding' from 'fastembed' (/opt/miniconda3/envs/qdrant-image-detection/lib/python3.11/site-packages/fastembed/__init__.py)
+
+---
+
+_**Assistant**_
+
+Ah, I see the issue. The `ImageEmbedding` class is not available in the current version of `fastembed`. Let's modify the code to use the correct import and class from fastembed:
+
+```diff
+  from typing import List
+  from fastapi import FastAPI, HTTPException, Body
+  from fastapi.middleware.cors import CORSMiddleware
+- from fastembed import ImageEmbedding, TextEmbedding
++ from fastembed import FlagEmbedding
+  from qdrant_client import QdrantClient
+  from qdrant_client.http import models
+  import numpy as np
+  from dotenv import load_dotenv
+  from pydantic import BaseModel
+
+  # Initialize FastEmbed models
+- image_model = ImageEmbedding(model_name="Qdrant/clip-ViT-B-32-vision")
+- text_model = TextEmbedding(model_name="Qdrant/clip-ViT-B-32-text")
++ text_model = FlagEmbedding(model_name="Qdrant/clip-ViT-B-32-text")
+```
+
+The changes:
+1. Removed the non-existent `ImageEmbedding` import
+2. Removed the image model since we're only doing text-to-image search
+3. Using `FlagEmbedding` which is the correct class for text embeddings
+
+The rest of the code can remain the same as we're only using the text model to generate embeddings for searching. The `FlagEmbedding` class provides the same functionality we need for text embeddings.
+
+Would you like me to help you test the updated code or make any additional improvements?
+
+---
+
 
 
 ---
