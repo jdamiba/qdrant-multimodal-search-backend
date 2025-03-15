@@ -1525,6 +1525,50 @@ Would you like me to help you test the updated endpoint or make any additional i
 
 ---
 
+_**User**_
+
+Error details: 'list' object has no attribute 'results'
+
+---
+
+_**Assistant**_
+
+Ah, I see the issue. The `search` method returns a list directly, not an object with a `results` attribute. Let's fix the response handling:
+
+```diff
+        # Search in Qdrant
+        search_results = qdrant_client.search(
+            collection_name=COLLECTION_NAME,
+            query_vector=query_embedding.tolist(),
+            limit=request.limit
+        )
+        
+-       print(f"Found {len(search_results.results)} results")
++       print(f"Found {len(search_results)} results")
+        
+        # Format results
+        results = [
+            {
+                "filename": hit.payload["filename"],
+                "score": hit.score
+            }
+-           for hit in search_results.results
++           for hit in search_results
+        ]
+```
+
+The changes:
+1. Removed `.results` since `search_results` is already a list
+2. Iterate directly over `search_results`
+
+The Qdrant `search` method returns a list of search hits directly, where each hit contains:
+- `payload`: Dictionary containing the metadata (including filename)
+- `score`: Similarity score
+
+This should resolve the error and properly format the results for your frontend. Would you like me to help you test the updated endpoint or make any additional improvements?
+
+---
+
 
 
 ---

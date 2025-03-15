@@ -1,6 +1,6 @@
-# Image Search API with CLIP and Qdrant Cloud
+# Multi-modal Image Search API with CLIP and Qdrant Cloud
 
-This FastAPI server provides endpoints for uploading images and performing semantic similarity search using OpenAI's CLIP model and Qdrant Cloud vector database.
+This FastAPI server provides an endpoint for performing semantic similarity search using OpenAI's CLIP model and Qdrant Cloud vector database.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
    - Create an `images` directory in the project root
    - Place your image files (`.jpg`, `.jpeg`, or `.png`) in this directory
-   - These images will be automatically uploaded to Qdrant when starting the server for the first time
+   - Run `python embed_and_upsert.py` to create embeddings of your images and upsert them into a Qdrant collection.
 
 4. Start the server:
 
@@ -41,21 +41,7 @@ python main.py
 
 The server will run at `http://localhost:8000`
 
-When starting the server for the first time:
-
-- A new collection will be created in Qdrant Cloud
-- All images from the `images` directory will be automatically processed and uploaded
-- Progress information will be printed to the console
-
 ## API Endpoints
-
-### Upload Images
-
-- **URL**: `/upsert`
-- **Method**: `POST`
-- **Content-Type**: `multipart/form-data`
-- **Body**: Form data with one or more image files
-- **Response**: List of processed images with status
 
 ### Search Images
 
@@ -74,17 +60,15 @@ When starting the server for the first time:
 
 ## Example Usage
 
-### Upload Additional Images
-
-```bash
-curl -X POST -F "files=@/path/to/image1.jpg" -F "files=@/path/to/image2.jpg" http://localhost:8000/upsert
-```
-
 ### Search Images
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"query": "a red car"}' http://localhost:8000/search
 ```
+
+## Deployment
+
+This FastAPI server can be deployed to Render, making it accessible to a deployed frontend application. Instructions for how to deploy a FastAPI app on Render can be found at https://render.com/docs/deploy-fastapi?utm_campaign=fastapi&utm_medium=referral&utm_source=deploydoc.
 
 ## Security Note
 
